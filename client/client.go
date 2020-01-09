@@ -105,14 +105,30 @@ func (_self *Client) reflect(obj interface{}, configMap map[string]*ConfigValue)
 	}
 
 	for i := 0; i < rType.NumField(); i++ {
-		tag := rType.Field(i).Tag.Get(VARCONF)
+		rT := rType.Field(i)
+		rV := rVal.Field(i)
+		tag := rT.Tag.Get(VARCONF)
 		if tag == "" {
 			continue
 		}
 		configValue, ok := configMap[tag]
 		if ok {
 			if configValue != nil {
-				rVal.Field(i).Set(reflect.ValueOf(configValue.Value))
+				data := configValue.Value
+				if rT.Type.Kind() == reflect.Bool {
+					val, _ := strconv.ParseBool(data)
+					rV.SetBool(val)
+				} else if rT.Type.Kind() == reflect.String {
+					rV.SetString(data)
+				} else if rT.Type.Kind() == reflect.Int32 || rT.Type.Kind() == reflect.Int64 {
+					val, _ := strconv.ParseInt(data, 10, 64)
+					rV.SetInt(val)
+				} else if rT.Type.Kind() == reflect.Float32 || rT.Type.Kind() == reflect.Float64 {
+					val, _ := strconv.ParseFloat(data, 64)
+					rV.SetFloat(val)
+				} else {
+					return false, errors.New("not support " + rT.Type.Kind().String())
+				}
 			}
 		}
 	}
