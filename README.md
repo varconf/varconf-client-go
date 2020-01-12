@@ -2,6 +2,7 @@
 > 基于go语言的varconf客户端sdk.
 
 ![](https://img.shields.io/badge/language-go-cccfff.svg)
+[![Build Status](https://travis-ci.org/varconf/varconf-client-go.svg?branch=master)](https://travis-ci.org/varconf/varconf-client-go)
 
 ## 使用步骤
 ```
