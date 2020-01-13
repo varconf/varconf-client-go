@@ -23,12 +23,12 @@ import (
 	"strconv"
 )
 
-// must config with varconf's tag
+// 自动注入必须带varconf注解标志
 type Test struct {
 	Key string `varconf:"key"`
 }
 
-// listener is valid with watch mode
+// 监听配置变化
 func configListener(key, value string, timestamp int64) {
 	fmt.Println("key: " + key + " value: " + value + " timestamp: " + strconv.Itoa(int(timestamp)))
 }
@@ -61,14 +61,14 @@ import (
 func main() {
 	client, _ := client.NewClient("http://xxx", "your app token")
 
-    // pull key
-    pullKeyResult, _ := client.GetKeyConfig("key", true, 0)
-    fmt.Println("1 lastIndex: " + strconv.Itoa(pullKeyResult.RecentIndex))
-    fmt.Println("1 key: " + pullKeyResult.Data.Key + " value: " + pullKeyResult.Data.Value + " timestamp: " + strconv.Itoa(int(pullKeyResult.Data.Timestamp)))
+    	// 手动拉取配置
+	pullKeyResult, _ := client.GetKeyConfig("key", true, 0)
+	fmt.Println("1 lastIndex: " + strconv.Itoa(pullKeyResult.RecentIndex))
+	fmt.Println("1 key: " + pullKeyResult.Data.Key + " value: " + pullKeyResult.Data.Value + " timestamp: " + strconv.Itoa(int(pullKeyResult.Data.Timestamp)))
 
-    pullKeyResult, _ = client.GetKeyConfig("key", true, pullKeyResult.RecentIndex)
-    fmt.Println("2 lastIndex: " + strconv.Itoa(pullKeyResult.RecentIndex))
-    fmt.Println("2 key: " + pullKeyResult.Data.Key + " value: " + pullKeyResult.Data.Value + " timestamp: " + strconv.Itoa(int(pullKeyResult.Data.Timestamp)))
+	pullKeyResult, _ = client.GetKeyConfig("key", true, pullKeyResult.RecentIndex)
+	fmt.Println("2 lastIndex: " + strconv.Itoa(pullKeyResult.RecentIndex))
+	fmt.Println("2 key: " + pullKeyResult.Data.Key + " value: " + pullKeyResult.Data.Value + " timestamp: " + strconv.Itoa(int(pullKeyResult.Data.Timestamp)))
 }
 ```
 
