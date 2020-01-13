@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/varconf/varconf-client-go"
-	"log"
-	"os"
 	"strconv"
 )
 
@@ -18,7 +16,7 @@ func configListener(key, value string, timestamp int64) {
 }
 
 func main() {
-	client, _ := client.NewClient("varconf's url", "your app token", log.New(os.Stdout, "Info: ", log.Ltime|log.Lshortfile))
+	client, _ := client.NewClient("varconf's url", "your app token")
 
 	test := Test{}
 

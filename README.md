@@ -33,7 +33,7 @@ func configListener(key, value string, timestamp int64) {
 }
 
 func main() {
-	client, _ := client.NewClient("http://xxx", "your app token", log.New(os.Stdout, "Info: ", log.Ltime|log.Lshortfile))
+	client, _ := client.NewClient("http://xxx", "your app token")
 
 	test := Test{}
 
@@ -58,7 +58,7 @@ import (
 )
 
 func main() {
-	client, _ := client.NewClient("http://xxx", "your app token", log.New(os.Stdout, "Info: ", log.Ltime|log.Lshortfile))
+	client, _ := client.NewClient("http://xxx", "your app token")
 
     // pull key
     pullKeyResult, _ := client.GetKeyConfig("key", true, 0)

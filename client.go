@@ -12,26 +12,31 @@ import (
 	"time"
 )
 
+// VARCONF is annotation tag
 const (
 	VARCONF = "varconf"
 )
 
+// ConfigValue configuration details
 type ConfigValue struct {
 	Key       string `json:"key"`
 	Value     string `json:"value"`
 	Timestamp int64  `json:"timestamp"`
 }
 
+// PullKeyResult is api result
 type PullKeyResult struct {
 	Data        *ConfigValue `json:"data"`
 	RecentIndex int          `json:"recentIndex"`
 }
 
+// PullAppResult is api result
 type PullAppResult struct {
 	Data        map[string]*ConfigValue `json:"data"`
 	RecentIndex int                     `json:"recentIndex"`
 }
 
+// Client must init with varconf's url and app's access token
 type Client struct {
 	url      string
 	token    string
@@ -39,13 +44,27 @@ type Client struct {
 	logger   *log.Logger
 }
 
+// Listener is callback function for configuration changes
 type Listener func(string, string, int64)
 
-func NewClient(url, token string, logger *log.Logger) (*Client, error) {
-	client := &Client{url: url, token: token, logger: logger}
+// NewClient is client init method
+func NewClient(url, token string) (*Client, error) {
+	client := &Client{url: url, token: token}
 	return client, nil
 }
 
+// SetLogger set the logger for client
+func (_self *Client) SetLogger(logger *log.Logger)  {
+	_self.logger = logger
+}
+
+// SetListener set the listener for watch configuration
+func (_self *Client) SetListener(listener Listener) {
+	_self.listener = listener
+}
+
+// Watch add a object to watch,
+// Client will automatically change the field's value
 func (_self *Client) Watch(obj interface{}, errSleep int) {
 	lastIndex := 0
 	for {
@@ -74,10 +93,7 @@ func (_self *Client) Watch(obj interface{}, errSleep int) {
 	}
 }
 
-func (_self *Client) SetListener(listener Listener) {
-	_self.listener = listener
-}
-
+// GetAppConfig manually pull all configuration
 func (_self *Client) GetAppConfig(longPull bool, lastIndex int) (*PullAppResult, error) {
 	url := _self.url + "/api/config" + "?token=" + _self.token
 	if longPull {
@@ -96,6 +112,7 @@ func (_self *Client) GetAppConfig(longPull bool, lastIndex int) (*PullAppResult,
 	return &appResult, nil
 }
 
+// GetKeyConfig manually pull the configuration of the specified key
 func (_self *Client) GetKeyConfig(key string, longPull bool, lastIndex int) (*PullKeyResult, error) {
 	url := _self.url + "/api/config/" + key + "?token=" + _self.token
 	if longPull {
