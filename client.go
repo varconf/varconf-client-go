@@ -54,7 +54,7 @@ func NewClient(url, token string) (*Client, error) {
 }
 
 // SetLogger set the logger for client
-func (_self *Client) SetLogger(logger *log.Logger)  {
+func (_self *Client) SetLogger(logger *log.Logger) {
 	_self.logger = logger
 }
 

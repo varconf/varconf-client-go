@@ -6,7 +6,8 @@ import (
 	"strconv"
 )
 
-// must config with varconf's tag
+// Test can automatic injection
+// Automatic injection needs annotation support
 type Test struct {
 	Key string `varconf:"key"`
 }
