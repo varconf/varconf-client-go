@@ -26,10 +26,13 @@ func main() {
 	client.SetListener(configListener)
 
 	// pull key
-	configValue, lastIndex, _ := client.GetKeyConfig("key", true, 0)
-	configValue, lastIndex, _ = client.GetKeyConfig("key", true, lastIndex)
-	fmt.Println("lastIndex: " + strconv.Itoa(lastIndex))
-	fmt.Println("key: " + configValue.Key + " value: " + configValue.Value + " timestamp: " + strconv.Itoa(int(configValue.Timestamp)))
+	pullKeyResult, _ := client.GetKeyConfig("key", true, 0)
+	fmt.Println("1 lastIndex: " + strconv.Itoa(pullKeyResult.RecentIndex))
+	fmt.Println("1 key: " + pullKeyResult.Data.Key + " value: " + pullKeyResult.Data.Value + " timestamp: " + strconv.Itoa(int(pullKeyResult.Data.Timestamp)))
+
+	pullKeyResult, _ = client.GetKeyConfig("key", true, pullKeyResult.RecentIndex)
+	fmt.Println("2 lastIndex: " + strconv.Itoa(pullKeyResult.RecentIndex))
+	fmt.Println("2 key: " + pullKeyResult.Data.Key + " value: " + pullKeyResult.Data.Value + " timestamp: " + strconv.Itoa(int(pullKeyResult.Data.Timestamp)))
 
 	// test's filed will change automatic
 	client.Watch(&test, 5)

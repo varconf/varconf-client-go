@@ -2,6 +2,7 @@
 > 基于go语言的varconf客户端sdk.
 
 ![](https://img.shields.io/badge/language-go-cccfff.svg)
+[![Go Report Card](https://goreportcard.com/badge/github.com/varconf/varconf-client-go)](https://goreportcard.com/report/github.com/varconf/varconf-client-go)
 
 ## 使用步骤
 ```
@@ -59,11 +60,14 @@ import (
 func main() {
 	client, _ := client.NewClient("http://xxx", "your app token", log.New(os.Stdout, "Info: ", log.Ltime|log.Lshortfile))
 
-	// pull key
-	configValue, lastIndex, _ := client.GetKeyConfig("key", true, 0)
-	configValue, lastIndex, _ = client.GetKeyConfig("key", true, lastIndex)
-	fmt.Println("lastIndex: " + strconv.Itoa(lastIndex))
-	fmt.Println("key: " + configValue.Key + " value: " + configValue.Value + " timestamp: " + strconv.Itoa(int(configValue.Timestamp)))
+    // pull key
+    pullKeyResult, _ := client.GetKeyConfig("key", true, 0)
+    fmt.Println("1 lastIndex: " + strconv.Itoa(pullKeyResult.RecentIndex))
+    fmt.Println("1 key: " + pullKeyResult.Data.Key + " value: " + pullKeyResult.Data.Value + " timestamp: " + strconv.Itoa(int(pullKeyResult.Data.Timestamp)))
+
+    pullKeyResult, _ = client.GetKeyConfig("key", true, pullKeyResult.RecentIndex)
+    fmt.Println("2 lastIndex: " + strconv.Itoa(pullKeyResult.RecentIndex))
+    fmt.Println("2 key: " + pullKeyResult.Data.Key + " value: " + pullKeyResult.Data.Value + " timestamp: " + strconv.Itoa(int(pullKeyResult.Data.Timestamp)))
 }
 ```
 
